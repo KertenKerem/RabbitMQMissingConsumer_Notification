@@ -1,3 +1,6 @@
+# Connection strings are passed as arguments at runtime or can be set in the code
+# You should create first file1 using Master_file_generator.py in the repo
+
 import requests, difflib, os, smtplib, sys, time
 from requests.auth import HTTPBasicAuth
 from email.mime.text import MIMEText
@@ -141,7 +144,7 @@ if different_lines != "":
             server.sendmail(sender_email, receiver_email,message.as_string())
             time.sleep(5)
 
-    compare_files(file1, file2)#
+    compare_files(file1, file2)
 
 else:
     print(f"{dtnow} : Everything is OK")
