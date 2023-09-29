@@ -1,18 +1,20 @@
+# Build control file with current RabbitMQ consumers 
+# Connection strings are passed as arguments at runtime or can be set in the code
+
 import requests, os, sys
 from requests.auth import HTTPBasicAuth
 
-RMQ_NAMES = ["APIReadQ1","APIReadQ2","APIReadQ3","APIReadQ4","APIReadQDMZ1","APIReadQDMZ2","APIReadQDMZ3","APIReadQDMZ4",
-"APIReadQDMZ5","APIReadQDMZ6","AS2APIReadQ1","AS2APIReadQ3","AS2APIReadQ4",
-"MiddlewareServiceReadQ1","MiddlewareServiceReadQ2","accounting","amazon","callCenter","documentManager","ebk","email","geocoding",
-"imageProcessing","marketPlace","pushnotification","reporting","routing","sms","sorting","tracking",
-"turkcell","util","webHook","notification","DirectorReadQ","parcelDelivery"]
+# Set your own consumer list into this array
+RMQ_NAMES = ["consumer01","consumer02","consumer03"]
 
 def get_number_of_consumers(queue_name):
     # Replace these values with your own
-    host_ip = "10.201.1.211"
+    host_ip = f"{argv[1]}"
     api_port = "15672"
-    login = "ynk"
-    password = "ynk"
+    login = f"{argv[2]}"
+    password = f"{argv[3]}"
+
+    file1 = "Prod_RMQ_01.txt"
 
     # Construct the API URL
     api_queues = f"http://{host_ip}:{api_port}/api/queues/%2F/{queue_name}"
@@ -32,4 +34,3 @@ def get_number_of_consumers(queue_name):
 for qName in RMQ_NAMES:
     get_number_of_consumers(qName)
 
-file1 = "Prod_RMQ_01.txt"
