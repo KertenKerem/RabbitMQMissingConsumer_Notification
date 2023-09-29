@@ -5,11 +5,7 @@ from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 
 
-RMQ_NAMES = ["APIReadQ1","APIReadQ2","APIReadQ3","APIReadQ4","APIReadQDMZ1","APIReadQDMZ2","APIReadQDMZ3","APIReadQDMZ4",
-"APIReadQDMZ5","APIReadQDMZ6","AS2APIReadQ1","AS2APIReadQ3","AS2APIReadQ4",
-"MiddlewareServiceReadQ1","MiddlewareServiceReadQ2","accounting","amazon","callCenter","documentManager","ebk","email","geocoding",
-"imageProcessing","marketPlace","pushnotification","reporting","routing","sms","sorting","tracking",
-"turkcell","util","webHook","notification","DirectorReadQ","parcelDelivery"]
+RMQ_NAMES = ["consumer01","consumer02","consumer03"]
 
 file1 = "Prod_RMQ_01.txt"
 file2 = "output.txt"
@@ -20,10 +16,10 @@ dtnow = now.strftime("%d-%m-%Y %H:%M:%S")
 
 def get_number_of_consumers(queue_name):
     # Replace these values with your own
-    host_ip = "10.201.1.211"
+    host_ip = f"{argv[1]}"
     api_port = "15672"
-    login = "ynk"
-    password = "ynk"
+    login = f"{argv[2]}"
+    password = f"{argv[3]}"
 
     # Construct the API URL
     api_queues = f"http://{host_ip}:{api_port}/api/queues/%2F/{queue_name}"
@@ -84,8 +80,8 @@ print(different_lines)
 
 
 # Send an automated email
-sender_email = 'rabbitmq@kolaygelsin.com'
-receiver_email = 'devopsteam@kolaygelsin.com'
+sender_email = 'sender@mail.address
+receiver_email = 'receipent@mailaddress'
 message = MIMEMultipart("alternative")
 
 
@@ -97,7 +93,7 @@ if different_lines != "":
     for line in lines:
         serverIP = line.split("#")[0]
         consumer_name = line.split("#")[1]
-        description = (f"{serverIP} sunucusundaki {consumer_name} isimli consumerdan cevap alınamamaktadır. Gerekli kontrollerin yapılmasını rica ederim.")
+        description = (f"No response can be received from the consumer named {consumer_name} on the {serverIP} server. I request that the necessary checks be carried out.")
         body = f"""
 <!DOCTYPE html><html lang="en">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -134,21 +130,21 @@ if different_lines != "":
 
 
 
-
+#add your smtp relay server address
         print (description)
         message.attach(MIMEText(body, 'html'))
         message['Subject'] = f'[ALERT] CONSUMER DOWN: '+ consumer_name + " / "+ serverIP
         message['From'] = sender_email
         message['To'] = receiver_email
         #Add the email body
-        with smtplib.SMTP('10.200.6.201', 25) as server:
+        with smtplib.SMTP('your.server.ip.address', 25) as server:
             server.sendmail(sender_email, receiver_email,message.as_string())
             time.sleep(5)
 
     compare_files(file1, file2)#
 
 else:
-    print(f"{dtnow} : ne sıkıntı ne tıkırtı")
+    print(f"{dtnow} : Everything is OK")
 
     # Diff the files
     os.remove(file2)
